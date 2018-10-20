@@ -1,5 +1,6 @@
 FROM python:2.7-alpine3.6
-Maintainer Robert Szynal <rjszynal@gmail.com>
+LABEL maintainer.name="Robert Szynal" \
+      maintainer.email="rjszynal@gmail.com"
 
 RUN pip install -I flexget transmissionrpc
 
