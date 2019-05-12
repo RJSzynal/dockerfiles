@@ -35,21 +35,6 @@ RUN apt-get update && apt-get -y install \
 		--no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
-# Potentially redundant packages
-		#libgtk-3-0 \
-		#libpango-1.0-0 \
-		#libxcomposite1 \
-		#libxcursor1 \
-		#libxdamage1 \
-		#libxext6 \
-		#libxfixes3 \
-		#libxi6 \
-		#libxrandr2 \
-		#libxrender1 \
-		#libgl1-mesa-dri \
-		#libgl1-mesa-glx \
-		#gnome-themes-standard \
-
 # Install VSCodium
 RUN buildDeps=' \
 		ca-certificates \
