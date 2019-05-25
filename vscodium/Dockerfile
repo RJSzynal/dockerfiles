@@ -5,12 +5,12 @@
 #     -v /etc/localtime:/etc/localtime:ro \
 #     -v /etc/passwd:/etc/passwd:ro \
 #     -v "${HOME}:${HOME}" \
-#     -e "DISPLAY=unix${DISPLAY}" \
-#     --device /dev/dri \
+#     -e DISPLAY \
+#     --device /dev/snd \
 #     -u $(id -u):$(id -g) \
 #     -w $(pwd) \
 #     --name vscodium \
-#     jnvinet/vscodium
+#     rjszynal/vscodium
 
 # Base docker image
 FROM debian:sid-slim
