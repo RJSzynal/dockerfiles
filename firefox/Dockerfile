@@ -38,6 +38,4 @@ RUN groupadd firefox \
 # Run as non privileged user
 USER firefox
 
-COPY entrypoint.sh /usr/bin/startfirefox
-
-ENTRYPOINT [ "startfirefox" ]
+ENTRYPOINT [ "firefox" ]
