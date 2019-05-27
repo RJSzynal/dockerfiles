@@ -1,6 +1,9 @@
+# Flexget
+#
+# */30 * * * * docker run --rm -v [LOCAL_CONFIG_LOCATION]:/root/.flexget --link transmission:transmission rjszynal/flexget
+
 FROM python:2.7-alpine3.6
-LABEL maintainer.name="Robert Szynal" \
-      maintainer.email="rjszynal@gmail.com"
+LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
 
 RUN pip install -I flexget transmissionrpc
 
