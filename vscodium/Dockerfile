@@ -14,7 +14,7 @@
 
 # Base docker image
 FROM debian:sid-slim
-LABEL maintainer "Julien Vinet <contact@julienvinet.dev>"
+LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
 
 # Tell debconf to run in non-interactive mode
 ENV DEBIAN_FRONTEND noninteractive
