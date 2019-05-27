@@ -3,6 +3,7 @@
 # Copied unchanged from Jess Frazelle
 
 FROM python:2-alpine
+LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
 
 ENV PATH $PATH:/usr/src/google-cloud-sdk/bin
 ENV CLOUD_SDK_DOCKER_VERSION 247.0.0
