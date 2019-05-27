@@ -1,18 +1,31 @@
 # Run Chromium in a container
 #
-# docker run -it \
-#	--net host \ # may as well YOLO
-#	--cpuset-cpus 0 \ # control the cpu
-#	--memory 512mb \ # max memory it can use
-#	-v /tmp/.X11-unix:/tmp/.X11-unix \ # mount the X11 socket
-#	-e DISPLAY=unix$DISPLAY \
-#	-v $HOME/Downloads:/home/chromium/Downloads \
-#	-v $HOME/.config/chromium/:/data \ # if you want to save state
-#	--security-opt seccomp=$HOME/chrome.json \
-#	--device /dev/snd \ # so we have sound
-#	-v /dev/shm:/dev/shm \
-#	--name chromium \
-#	jess/chromium
+# if [ ! -f ${HOME}/seccomp/chrome.json ]; then
+# 	mkdir -p ${HOME}/seccomp
+# 	wget https://raw.githubusercontent.com/jfrazelle/dotfiles/master/etc/docker/seccomp/chrome.json -O ${HOME}/seccomp/chrome.json
+# fi
+# docker run --rm -d \
+# 	--cpuset-cpus 0 \
+# 	--memory 3gb \
+# 	--shm-size 2g \
+# 	--device /dev/dri \
+# 	--device /dev/usb \
+# 	--device /dev/bus/usb \
+# 	-v /tmp/.X11-unix:/tmp/.X11-unix \
+# 	-e DISPLAY \
+# 	-e GDK_SCALE \
+# 	-e GDK_DPI_SCALE \
+# 	-v /etc/localtime:/etc/localtime:ro \
+# 	-v "/etc/hosts:/etc/hosts:ro"
+# 	--security-opt seccomp:${HOME}/seccomp/chrome.json
+# 	-v ${HOME}/.chromium/cache:/home/chromium/.cache
+# 	-v ${HOME}/.chromium/config:/home/chromium/.config
+# 	-v ${HOME}/.chromium/pki:/home/chromium/.pki
+# 	-v ${HOME}/.chromium/local:/home/chromium/.local
+# 	-v ${HOME}/.chromium/gnome:/home/chromium/.gnome
+# 	--name chromium \
+# 	rjszynal/chromium \
+# 		--user-data-dir="/home/chromium/.config/chromium"
 #
 # You will want the custom seccomp profile:
 # 	wget https://raw.githubusercontent.com/jfrazelle/dotfiles/master/etc/docker/seccomp/chrome.json -O ~/chrome.json
