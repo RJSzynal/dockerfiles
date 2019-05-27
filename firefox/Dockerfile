@@ -1,4 +1,4 @@
-# Run Firefox in a container
+# Firefox
 #
 # docker run --rm -d \
 # 	--cpuset-cpus 0 \

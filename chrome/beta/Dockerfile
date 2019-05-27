@@ -1,4 +1,4 @@
-# Run Chrome Beta in a container
+# Chrome Beta
 #
 # if [ ! -f ${HOME}/seccomp/chrome.json ]; then
 # 	mkdir -p ${HOME}/seccomp

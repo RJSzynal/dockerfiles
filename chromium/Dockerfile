@@ -1,4 +1,4 @@
-# Run Chromium in a container
+# Chromium
 #
 # if [ ! -f ${HOME}/seccomp/chrome.json ]; then
 # 	mkdir -p ${HOME}/seccomp

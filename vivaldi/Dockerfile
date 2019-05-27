@@ -1,4 +1,4 @@
-# Run Vivaldi in a container
+# Vivaldi
 #
 # docker run -it \
 #	--cpuset-cpus 0 \ # control the cpu

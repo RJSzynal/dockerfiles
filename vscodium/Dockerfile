@@ -1,4 +1,4 @@
-# Run VSCodium in a container
+# VSCodium
 #
 # docker run -d \
 #     --net host \

@@ -1,4 +1,4 @@
-# Run VSCode in a container
+# VSCode
 #
 # docker run -d \
 #     --net host \

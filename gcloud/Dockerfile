@@ -1,4 +1,4 @@
-# Run gcloud in a container
+# gcloud
 #
 # Copied unchanged from Jess Frazelle
 

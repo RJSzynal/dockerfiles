@@ -1,4 +1,4 @@
-# Run Chrome in a container
+# Chrome
 #
 # if [ ! -f ${HOME}/seccomp/chrome.json ]; then
 # 	mkdir -p ${HOME}/seccomp
