@@ -1,0 +1,22 @@
+# hollywood
+#
+# Usage:
+# 	docker run --rm -it rjszynal/hollywood
+
+FROM debian:sid-slim
+LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
+
+# Install hollywood
+RUN apt-get update && apt-get install -y \
+		hollywood \
+	--no-install-recommends \
+	&& rm -rf /var/lib/apt/lists/*
+
+# Add hollywood user
+RUN groupadd -r hollywood && useradd -r -g hollywood -G audio,video hollywood \
+	&& mkdir -p /home/hollywood && chown -R hollywood:hollywood /home/hollywood
+
+# Run as non privileged user
+USER hollywood
+
+ENTRYPOINT [ "hollywood" ]
