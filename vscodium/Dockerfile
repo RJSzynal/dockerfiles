@@ -58,4 +58,4 @@ RUN useradd -m -G audio,video vscodium
 # Run as non privileged user
 USER vscodium
 
-ENTRYPOINT [ "/usr/share/vscodium/vscodium" ]
+ENTRYPOINT [ "/usr/share/codium/codium" ]
