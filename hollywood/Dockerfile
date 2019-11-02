@@ -22,8 +22,7 @@ RUN apt-get update && apt-get install -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Add hollywood user
-RUN groupadd -r hollywood && useradd -r -g hollywood -G audio,video hollywood \
-	&& mkdir -p /home/hollywood && chown -R hollywood:hollywood /home/hollywood
+RUN useradd -m -G audio,video hollywood
 
 # Run as non privileged user
 USER hollywood

@@ -49,8 +49,7 @@ RUN buildDeps=' \
 	&& apt-get purge -y --auto-remove $buildDeps
 
 # Add VSCode user
-RUN groupadd -r vscode && useradd -r -g vscode -G audio,video vscode \
-	&& mkdir -p /home/vscode && chown -R vscode:vscode /home/vscode
+RUN useradd -m -G audio,video vscode
 
 # Run as non privileged user
 USER vscode

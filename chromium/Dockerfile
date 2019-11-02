@@ -67,8 +67,7 @@ RUN buildDeps=' \
 	&& apt-get purge -y --auto-remove $buildDeps
 
 # Add chromium user
-RUN groupadd -r chromium && useradd -r -g chromium -G audio,video chromium \
-	&& mkdir -p /home/chromium/Downloads && chown -R chromium:chromium /home/chromium
+RUN useradd -m -G audio,video chromium
 
 # Run as non privileged user
 USER chromium

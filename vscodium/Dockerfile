@@ -53,8 +53,7 @@ RUN buildDeps=' \
 	&& apt-get purge -y --auto-remove $buildDeps
 
 # Add VSCodium user
-RUN groupadd -r vscodium && useradd -r -g vscodium -G audio,video vscodium \
-	&& mkdir -p /home/vscodium && chown -R vscodium:vscodium /home/vscodium
+RUN useradd -m -G audio,video vscodium
 
 # Run as non privileged user
 USER vscodium

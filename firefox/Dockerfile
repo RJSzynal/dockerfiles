@@ -32,8 +32,7 @@ RUN apt-get update && apt-get install -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Add firefox user
-RUN groupadd -r firefox && useradd -r -g firefox -G audio,video firefox \
-	&& mkdir -p /home/firefox/Downloads && chown -R firefox:firefox /home/firefox
+RUN useradd -m -G audio,video firefox
 
 # Run as non privileged user
 USER firefox

@@ -14,8 +14,7 @@ RUN apt-get update && apt-get install -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Add htop user
-RUN groupadd -r htop && useradd -r -g htop -G audio,video htop \
-	&& mkdir -p /home/htop && chown -R htop:htop /home/htop
+RUN useradd -m -G audio,video htop
 
 # Run as non privileged user
 USER htop

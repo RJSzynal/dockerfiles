@@ -17,8 +17,7 @@ RUN apt-get update && apt-get install -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Add gimp user
-RUN groupadd -r gimp && useradd -r -g gimp -G audio,video gimp \
-	&& mkdir -p /home/gimp/Downloads && chown -R gimp:gimp /home/gimp
+RUN useradd -m -G audio,video gimp
 
 # Run as non privileged user
 USER gimp

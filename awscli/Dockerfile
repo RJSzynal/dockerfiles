@@ -12,8 +12,7 @@ RUN apt-get update && apt-get install -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Add Audacity user
-RUN groupadd -r aws && useradd -r -g aws -G audio,video aws \
-	&& mkdir -p /home/aws && chown -R aws:aws /home/aws
+RUN useradd -m -G audio,video aws
 
 # Run as non privileged user
 USER aws
