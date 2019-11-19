@@ -2,13 +2,13 @@ docker_repo_prefix  := rjszynal
 project_dockerfiles := $(wildcard */Dockerfile)
 projects            := $(project_dockerfiles:%/Dockerfile=%)
 
-.PHONY: all alpine debian audacity awscli azure-cli chrome chrome-beta chromium firefox flexget gcloud gimp gitsome hollywood htop keepass2 keepassxc signal-messenger signal-messenger-beta spotify-client vivaldi vscode vscodium
+.PHONY: all alpine debian audacity awscli azure-cli chrome chrome-beta chromium firefox flexget gcloud gimp gitsome hollywood htop keepass2 keepassxc signal-messenger signal-messenger-beta spotifyd spotify-client vivaldi vscode vscodium
 
 all: ${projects}
 
 alpine: azure-cli flexget gcloud gitsome keepassxc
 
-debian: audacity awscli chrome chrome-beta chromium firefox gimp hollywood htop keepass2 signal-messenger signal-messenger-beta spotify-client vivaldi vscode vscodium
+debian: audacity awscli chrome chrome-beta chromium firefox gimp hollywood htop keepass2 signal-messenger signal-messenger-beta spotifyd spotify-client vivaldi vscode vscodium
 
 audacity:
 	@echo "==Building ${@}=="
@@ -107,6 +107,15 @@ signal-messenger:
 signal-messenger-beta:
 	@echo "==Building ${@}=="
 	@echo "This is currently a manual build"
+
+spotifyd:
+	@echo "==Building ${@}=="
+	version=$$(curl -s https://api.github.com/repos/Spotifyd/spotifyd/releases/latest | grep "tag_name" | cut -d '"' -f 4 | sed 's/^v//'); \
+	docker build -t ${docker_repo_prefix}/${@}:$${version} -t ${docker_repo_prefix}/${@}:$${version%.*} -t ${docker_repo_prefix}/${@}:$${version%%.*} -t ${docker_repo_prefix}/${@}:latest ${@}; \
+	docker push ${docker_repo_prefix}/${@}:$${version}; \
+	docker push ${docker_repo_prefix}/${@}:$${version%.*}; \
+	docker push ${docker_repo_prefix}/${@}:$${version%%.*}; \
+	docker push ${docker_repo_prefix}/${@}:latest
 
 spotify-client:
 	@echo "==Building ${@}=="
