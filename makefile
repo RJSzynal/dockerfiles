@@ -32,7 +32,7 @@ version_build = @echo "==Building ${1}==" && \
 	docker push ${docker_repo_prefix}/${1}:latest
 
 
-.PHONY: all alpine debian audacity awscli azure-cli chrome chrome-beta chromium firefox flexget gcloud gimp gitsome hollywood htop keepass2 keepassxc signal-messenger signal-messenger-beta spotify-client spotifyd st vivaldi vscode vscodium
+.PHONY: all alpine debian audacity awscli azure-cli chrome chrome-beta chromium firefox flexget gcloud gimp gitsome hollywood htop keepass2 keepassxc signal-messenger signal-messenger-beta spotify-client spotifyd st surf vivaldi vscode vscodium
 
 all: ${projects}
 
@@ -111,6 +111,9 @@ spotifyd:
 	$(call github_build,${@})
 
 st:
+	$(call suckless_build,${@})
+
+surf:
 	$(call suckless_build,${@})
 
 vivaldi:
