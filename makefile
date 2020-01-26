@@ -2,6 +2,36 @@ docker_repo_prefix  := rjszynal
 project_dockerfiles := $(wildcard */Dockerfile)
 projects            := $(project_dockerfiles:%/Dockerfile=%)
 
+github_build = @echo "==Building ${1}==" && \
+	version=$$(curl -s https://api.github.com/repos/${1}/${1}/releases/latest | grep "tag_name" | cut -d '"' -f 4 | sed 's/^v//') && \
+	part_version=$${version%.*} && \
+	docker build -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${part_version} -t ${docker_repo_prefix}/${1}:$${part_version%.*} -t ${docker_repo_prefix}/${1}:$${part_version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
+	docker push ${docker_repo_prefix}/${1}:$${version} && \
+	docker push ${docker_repo_prefix}/${1}:$${part_version} && \
+	docker push ${docker_repo_prefix}/${1}:$${part_version%.*} && \
+	docker push ${docker_repo_prefix}/${1}:$${part_version%%.*} && \
+	docker push ${docker_repo_prefix}/${1}:latest
+
+suckless_build = @echo "==Building ${1}==" && \
+	version=$$(curl -s https://git.suckless.org/${1}/refs.html | grep '<tr>' | tail -n1 | sed -n 's/.*<td>\([0-9.]*\)<\/td>.*/\1/p') && \
+	docker build -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${version%.*} -t ${docker_repo_prefix}/${1}:$${version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
+	docker push ${docker_repo_prefix}/${1}:$${version} && \
+	docker push ${docker_repo_prefix}/${1}:$${version%.*} && \
+	docker push ${docker_repo_prefix}/${1}:$${version%%.*} && \
+	docker push ${docker_repo_prefix}/${1}:latest
+
+version_build = @echo "==Building ${1}==" && \
+	docker build --no-cache -t ${docker_repo_prefix}/${1}:latest ${1}
+	version=$$(docker run --rm ${docker_repo_prefix}/${1}:latest --version | perl -lpe '($_)=/([0-9]+([.][0-9]+)+)/' | cut -d '.' -f 1-4) && \
+	part_version=$${version%.*} && \
+	docker build -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${part_version} -t ${docker_repo_prefix}/${1}:$${part_version%.*} -t ${docker_repo_prefix}/${1}:$${part_version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
+	docker push ${docker_repo_prefix}/${1}:$${version} && \
+	docker push ${docker_repo_prefix}/${1}:$${part_version} && \
+	docker push ${docker_repo_prefix}/${1}:$${part_version%.*} && \
+	docker push ${docker_repo_prefix}/${1}:$${part_version%%.*} && \
+	docker push ${docker_repo_prefix}/${1}:latest
+
+
 .PHONY: all alpine debian audacity awscli azure-cli chrome chrome-beta chromium firefox flexget gcloud gimp gitsome hollywood htop keepass2 keepassxc signal-messenger signal-messenger-beta spotify-client spotifyd st vivaldi vscode vscodium
 
 all: ${projects}
@@ -23,50 +53,16 @@ azure-cli:
 	@echo "This is currently a manual build"
 
 chrome:
-	@echo "==Building ${@}=="
-	docker build --no-cache -t ${docker_repo_prefix}/${@}:latest ${@}
-	version=$$(docker run --rm ${docker_repo_prefix}/${@}:latest --version | cut -d ' ' -f 3) && \
-	part_version=$${version%.*} && \
-	docker build -t ${docker_repo_prefix}/${@}:$${version} -t ${docker_repo_prefix}/${@}:$${part_version} -t ${docker_repo_prefix}/${@}:$${part_version%.*} -t ${docker_repo_prefix}/${@}:$${part_version%%.*} -t ${docker_repo_prefix}/${@}:latest ${@} && \
-	docker push ${docker_repo_prefix}/${@}:$${version} && \
-	docker push ${docker_repo_prefix}/${@}:$${part_version} && \
-	docker push ${docker_repo_prefix}/${@}:$${part_version%.*} && \
-	docker push ${docker_repo_prefix}/${@}:$${part_version%%.*} && \
-	docker push ${docker_repo_prefix}/${@}:latest
+	$(call version_build,${@})
 
 chrome-beta:
-	@echo "==Building ${@}=="
-	docker build --no-cache -t ${docker_repo_prefix}/${@}:latest ${@}
-	version=$$(docker run --rm ${docker_repo_prefix}/${@}:latest --version | cut -d ' ' -f 3) && \
-	part_version=$${version%.*} && \
-	docker build -t ${docker_repo_prefix}/${@}:$${version} -t ${docker_repo_prefix}/${@}:$${part_version} -t ${docker_repo_prefix}/${@}:$${part_version%.*} -t ${docker_repo_prefix}/${@}:$${part_version%%.*} -t ${docker_repo_prefix}/${@}:latest ${@} && \
-	docker push ${docker_repo_prefix}/${@}:$${version} && \
-	docker push ${docker_repo_prefix}/${@}:$${part_version} && \
-	docker push ${docker_repo_prefix}/${@}:$${part_version%.*} && \
-	docker push ${docker_repo_prefix}/${@}:$${part_version%%.*} && \
-	docker push ${docker_repo_prefix}/${@}:latest
+	$(call version_build,${@})
 
 chromium:
-	@echo "==Building ${@}=="
-	docker build --no-cache -t ${docker_repo_prefix}/${@}:latest ${@}
-	version=$$(docker run --rm ${docker_repo_prefix}/${@}:latest --version | cut -d ' ' -f 3) && \
-	part_version=$${version%.*} && \
-	docker build -t ${docker_repo_prefix}/${@}:$${version} -t ${docker_repo_prefix}/${@}:$${part_version} -t ${docker_repo_prefix}/${@}:$${part_version%.*} -t ${docker_repo_prefix}/${@}:$${part_version%%.*} -t ${docker_repo_prefix}/${@}:latest ${@} && \
-	docker push ${docker_repo_prefix}/${@}:$${version} && \
-	docker push ${docker_repo_prefix}/${@}:$${part_version} && \
-	docker push ${docker_repo_prefix}/${@}:$${part_version%.*} && \
-	docker push ${docker_repo_prefix}/${@}:$${part_version%%.*} && \
-	docker push ${docker_repo_prefix}/${@}:latest
+	$(call version_build,${@})
 
 firefox:
-	@echo "==Building ${@}=="
-	docker build --no-cache -t ${docker_repo_prefix}/${@}:latest ${@}
-	version=$$(docker run --rm ${docker_repo_prefix}/${@}:latest --version | cut -d ' ' -f 3) && \
-	docker build -t ${docker_repo_prefix}/${@}:$${version} -t ${docker_repo_prefix}/${@}:$${version%.*} -t ${docker_repo_prefix}/${@}:$${version%%.*} -t ${docker_repo_prefix}/${@}:latest ${@} && \
-	docker push ${docker_repo_prefix}/${@}:$${version} && \
-	docker push ${docker_repo_prefix}/${@}:$${version%.*} && \
-	docker push ${docker_repo_prefix}/${@}:$${version%%.*} && \
-	docker push ${docker_repo_prefix}/${@}:latest
+	$(call version_build,${@})
 
 flexget:
 	@echo "==Building ${@}=="
@@ -109,34 +105,13 @@ signal-messenger-beta:
 	@echo "This is currently a manual build"
 
 spotify-client:
-	@echo "==Building ${@}=="
-	docker build --no-cache -t ${docker_repo_prefix}/${@}:latest ${@}
-	version=$$(docker run --rm ${docker_repo_prefix}/${@}:latest --version | cut -d ' ' -f 3 | cut -d '.' -f 1-4) && \
-	part_version=$${version%.*} && \
-	docker build -t ${docker_repo_prefix}/${@}:$${version} -t ${docker_repo_prefix}/${@}:$${part_version} -t ${docker_repo_prefix}/${@}:$${part_version%.*} -t ${docker_repo_prefix}/${@}:$${part_version%%.*} -t ${docker_repo_prefix}/${@}:latest ${@} && \
-	docker push ${docker_repo_prefix}/${@}:$${version} && \
-	docker push ${docker_repo_prefix}/${@}:$${part_version} && \
-	docker push ${docker_repo_prefix}/${@}:$${part_version%.*} && \
-	docker push ${docker_repo_prefix}/${@}:$${part_version%%.*} && \
-	docker push ${docker_repo_prefix}/${@}:latest
+	$(call version_build,${@})
 
 spotifyd:
-	@echo "==Building ${@}=="
-	version=$$(curl -s https://api.github.com/repos/Spotifyd/spotifyd/releases/latest | grep "tag_name" | cut -d '"' -f 4 | sed 's/^v//') && \
-	docker build -t ${docker_repo_prefix}/${@}:$${version} -t ${docker_repo_prefix}/${@}:$${version%.*} -t ${docker_repo_prefix}/${@}:$${version%%.*} -t ${docker_repo_prefix}/${@}:latest ${@} && \
-	docker push ${docker_repo_prefix}/${@}:$${version} && \
-	docker push ${docker_repo_prefix}/${@}:$${version%.*} && \
-	docker push ${docker_repo_prefix}/${@}:$${version%%.*} && \
-	docker push ${docker_repo_prefix}/${@}:latest
+	$(call github_build,${@})
 
 st:
-	@echo "==Building ${@}=="
-	version=$$(curl -s https://git.suckless.org/${@}/refs.html | grep '<tr>' | tail -n1 | sed -n 's/.*<td>\([0-9.]*\)<\/td>.*/\1/p') && \
-	docker build -t ${docker_repo_prefix}/${@}:$${version} -t ${docker_repo_prefix}/${@}:$${version%.*} -t ${docker_repo_prefix}/${@}:$${version%%.*} -t ${docker_repo_prefix}/${@}:latest ${@} && \
-	docker push ${docker_repo_prefix}/${@}:$${version} && \
-	docker push ${docker_repo_prefix}/${@}:$${version%.*} && \
-	docker push ${docker_repo_prefix}/${@}:$${version%%.*} && \
-	docker push ${docker_repo_prefix}/${@}:latest
+	$(call suckless_build,${@})
 
 vivaldi:
 	@echo "==Building ${@}=="
@@ -147,10 +122,4 @@ vscode:
 	@echo "This is currently a manual build"
 
 vscodium:
-	@echo "==Building ${@}=="
-	version=$$(curl -s https://api.github.com/repos/VSCodium/vscodium/releases/latest | grep "tag_name" | cut -d '"' -f 4) && \
-	docker build -t ${docker_repo_prefix}/${@}:$${version} -t ${docker_repo_prefix}/${@}:$${version%.*} -t ${docker_repo_prefix}/${@}:$${version%%.*} -t ${docker_repo_prefix}/${@}:latest ${@} && \
-	docker push ${docker_repo_prefix}/${@}:$${version} && \
-	docker push ${docker_repo_prefix}/${@}:$${version%.*} && \
-	docker push ${docker_repo_prefix}/${@}:$${version%%.*} && \
-	docker push ${docker_repo_prefix}/${@}:latest
+	$(call github_build,${@})
