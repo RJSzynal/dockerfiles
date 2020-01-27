@@ -7,13 +7,29 @@
 #		--name st \
 #		rjszynal/st
 
+FROM debian:sid-slim as build
+
+RUN apt-get update && apt-get install -y \
+        --no-install-recommends \
+		ca-certificates \
+		libfontconfig1-dev \
+		libfreetype6-dev \
+		gcc \
+		git \
+		make \
+		libx11-dev \
+		libxft-dev
+
+RUN git clone https://git.suckless.org/st /usr/src/st \
+	&& cd /usr/src/st \
+	&& make clean install
+
+
 FROM debian:sid-slim
 LABEL maintainer.name="Robert Szynal" \
       maintainer.email="rjszynal@gmail.com"
 
-RUN apt-get update && apt-get install -y \
-		--no-install-recommends \
-		stterm
+COPY --from=build /usr/local/bin/st /usr/bin/st
 
 # Add st user
 ARG username=st
