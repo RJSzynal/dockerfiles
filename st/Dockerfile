@@ -29,6 +29,14 @@ FROM debian:sid-slim
 LABEL maintainer.name="Robert Szynal" \
       maintainer.email="rjszynal@gmail.com"
 
+RUN apt-get update && apt-get install -y \
+        --no-install-recommends \
+		# libfontconfig1 \
+		# libfreetype6 \
+		libx11-6 \
+		libxft2 \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=build /usr/local/bin/st /usr/bin/st
 
 # Add st user
