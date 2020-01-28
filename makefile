@@ -12,8 +12,9 @@ github_build = @echo "==Building ${1}==" && \
 	docker push ${docker_repo_prefix}/${1}:$${part_version%%.*} && \
 	docker push ${docker_repo_prefix}/${1}:latest
 
-suckless_build = @echo "==Building ${1}==" && \
-	version=$$(curl -s https://git.suckless.org/${1}/refs.html | grep '<tr>' | tail -n1 | sed -n 's/.*<td>\([0-9.]*\)<\/td>.*/\1/p') && \
+suckless_build = echo "==Building ${1}==" && \
+	app="${1}" && \
+	version=$$(curl -s https://git.suckless.org/$${app%%-*}/refs.html | grep '<tr>' | tail -n1 | sed -n 's/.*<td>\([0-9.]*\)<\/td>.*/\1/p') && \
 	docker build -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${version%.*} -t ${docker_repo_prefix}/${1}:$${version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
 	docker push ${docker_repo_prefix}/${1}:$${version} && \
 	docker push ${docker_repo_prefix}/${1}:$${version%.*} && \
@@ -32,7 +33,7 @@ version_build = @echo "==Building ${1}==" && \
 	docker push ${docker_repo_prefix}/${1}:latest
 
 
-.PHONY: all alpine debian audacity awscli azure-cli chrome chrome-beta chromium firefox flexget gcloud gimp gitsome hollywood htop keepass2 keepassxc signal-messenger signal-messenger-beta spotify-client spotifyd st surf vivaldi vscode vscodium
+.PHONY: all alpine debian audacity awscli azure-cli chrome chrome-beta chromium firefox flexget gcloud gimp gitsome hollywood htop keepass2 keepassxc signal-messenger signal-messenger-beta spotify-client spotifyd st st-monokai surf vivaldi vscode vscodium
 
 all: ${projects}
 
@@ -111,6 +112,9 @@ spotifyd:
 	$(call github_build,${@})
 
 st:
+	$(call suckless_build,${@})
+
+st-monokai:
 	$(call suckless_build,${@})
 
 surf:
