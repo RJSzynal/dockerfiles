@@ -12,10 +12,18 @@ github_build = @echo "==Building ${1}==" && \
 	docker push ${docker_repo_prefix}/${1}:$${part_version%%.*} && \
 	docker push ${docker_repo_prefix}/${1}:latest
 
-suckless_build = echo "==Building ${1}==" && \
+suckless_build = @echo "==Building ${1}==" && \
 	app="${1}" && \
 	version=$$(curl -s https://git.suckless.org/$${app%%-*}/refs.html | grep '<tr>' | tail -n1 | sed -n 's/.*<td>\([0-9.]*\)<\/td>.*/\1/p') && \
 	docker build -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${version%.*} -t ${docker_repo_prefix}/${1}:$${version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
+	docker push ${docker_repo_prefix}/${1}:$${version} && \
+	docker push ${docker_repo_prefix}/${1}:$${version%.*} && \
+	docker push ${docker_repo_prefix}/${1}:$${version%%.*} && \
+	docker push ${docker_repo_prefix}/${1}:latest
+
+foldingathome_build = @echo "==Building ${1}==" && \
+	version=$$(curl -s https://download.foldingathome.org/ | grep "fahclient/debian-stable-64bit" | grep -Po '\d.\d.\d') && \
+	docker build --build-arg fah_version=$${version} -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${version%.*} -t ${docker_repo_prefix}/${1}:$${version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
 	docker push ${docker_repo_prefix}/${1}:$${version} && \
 	docker push ${docker_repo_prefix}/${1}:$${version%.*} && \
 	docker push ${docker_repo_prefix}/${1}:$${version%%.*} && \
@@ -33,13 +41,15 @@ version_build = @echo "==Building ${1}==" && \
 	docker push ${docker_repo_prefix}/${1}:latest
 
 
-.PHONY: all alpine debian audacity awscli azure-cli chrome chrome-beta chromium firefox flexget gcloud gimp gitsome hollywood htop keepass2 keepassxc signal-messenger signal-messenger-beta spotify-client spotifyd st st-monokai surf vivaldi vscode vscodium
+.PHONY: all alpine debian audacity awscli azure-cli chrome chrome-beta chromium firefox flexget foldingathome gcloud gimp gitsome hollywood htop keepass2 keepassxc signal-messenger signal-messenger-beta spotify-client spotifyd st st-monokai surf vivaldi vscode vscodium
 
 all: ${projects}
 
 alpine: azure-cli flexget gcloud gitsome keepassxc
 
 debian: audacity awscli chrome chrome-beta chromium firefox gimp hollywood htop keepass2 signal-messenger signal-messenger-beta spotifyd spotify-client vivaldi vscode vscodium
+
+ubuntu: foldingathome
 
 audacity:
 	@echo "==Building ${@}=="
@@ -68,6 +78,9 @@ firefox:
 flexget:
 	@echo "==Building ${@}=="
 	@echo "This is currently a manual build"
+
+foldingathome:
+	$(call foldingathome_build,${@})
 
 gcloud:
 	@echo "==Building ${@}=="
