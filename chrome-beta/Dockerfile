@@ -44,7 +44,6 @@ RUN apt-get update && apt-get install -y \
 		libcanberra-gtk* \
 		libgl1-mesa-dri \
 		libgl1-mesa-glx \
-		libpango1.0-0 \
 		libpulse0 \
 		libv4l-0 \
 		fonts-symbola \
@@ -60,9 +59,14 @@ RUN apt-get update && apt-get install -y \
 # Download the google-talkplugin
 RUN apt-get update && apt-get install -y \
 		curl \
+		libpango-1.0-0 \
 	--no-install-recommends \
 	&& curl -sSL "https://dl.google.com/linux/direct/google-talkplugin_current_amd64.deb" -o /tmp/google-talkplugin-amd64.deb \
-	&& dpkg -i /tmp/google-talkplugin-amd64.deb \
+	&& dpkg-deb -x /tmp/google-talkplugin-amd64.deb /tmp/google-talkplugin-amd64 \
+	&& dpkg-deb --control /tmp/google-talkplugin-amd64.deb /tmp/google-talkplugin-amd64/DEBIAN \
+	&& sed -i "s/libpango1.0-0/libpango-1.0-0/" /tmp/google-talkplugin-amd64/DEBIAN/control \
+	&& dpkg -b /tmp/google-talkplugin-amd64 /tmp/google-talkplugin-amd64-fixed.deb \
+	&& dpkg -i /tmp/google-talkplugin-amd64-fixed.deb \
 	&& rm -rf /tmp/*.deb \
 	&& apt-get purge -y --auto-remove curl \
 	&& rm -rf /var/lib/apt/lists/*
