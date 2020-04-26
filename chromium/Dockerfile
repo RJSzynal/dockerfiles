@@ -62,6 +62,10 @@ RUN buildDeps=' \
 	&& apt-get update && apt-get install -y $buildDeps --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& curl -sSL "https://dl.google.com/linux/direct/google-talkplugin_current_amd64.deb" -o /tmp/google-talkplugin-amd64.deb \
+	&& dpkg-deb -x /tmp/google-talkplugin-amd64.deb /tmp/google-talkplugin-amd64 \
+	&& dpkg-deb --control /tmp/google-talkplugin-amd64.deb /tmp/google-talkplugin-amd64/DEBIAN \
+	&& sed -i "s/libpango1.0-0/libpango-1.0-0/" /tmp/google-talkplugin-amd64/DEBIAN/control \
+	&& dpkg -b /tmp/google-talkplugin-amd64 /tmp/google-talkplugin-amd64-fixed.deb \
 	&& dpkg -i /tmp/google-talkplugin-amd64.deb \
 	&& rm -rf /tmp/*.deb \
 	&& apt-get purge -y --auto-remove $buildDeps
