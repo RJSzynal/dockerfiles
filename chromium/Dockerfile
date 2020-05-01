@@ -45,7 +45,6 @@ RUN apt-get update && apt-get install -y \
 		libexif-dev \
 		libgl1-mesa-dri \
 		libgl1-mesa-glx \
-		libpango1.0-0 \
 		libv4l-0 \
 		fonts-symbola \
 		--no-install-recommends \
@@ -54,21 +53,19 @@ RUN apt-get update && apt-get install -y \
 	&& /bin/echo -e 'export GOOGLE_API_KEY="AIzaSyCkfPOPZXDKNn8hhgu3JrA62wIgC93d44k"\nexport GOOGLE_DEFAULT_CLIENT_ID="811574891467.apps.googleusercontent.com"\nexport GOOGLE_DEFAULT_CLIENT_SECRET="kdloedMFGdGla2P1zacGjAQh"' > /etc/chromium.d/googleapikeys
 
 # Download the google-talkplugin
-RUN buildDeps=' \
-		ca-certificates \
+RUN apt-get update && apt-get install -y \
 		curl \
-	' \
-	&& set -x \
-	&& apt-get update && apt-get install -y $buildDeps --no-install-recommends \
-	&& rm -rf /var/lib/apt/lists/* \
+		libpango-1.0-0 \
+	--no-install-recommends \
 	&& curl -sSL "https://dl.google.com/linux/direct/google-talkplugin_current_amd64.deb" -o /tmp/google-talkplugin-amd64.deb \
 	&& dpkg-deb -x /tmp/google-talkplugin-amd64.deb /tmp/google-talkplugin-amd64 \
 	&& dpkg-deb --control /tmp/google-talkplugin-amd64.deb /tmp/google-talkplugin-amd64/DEBIAN \
 	&& sed -i "s/libpango1.0-0/libpango-1.0-0/" /tmp/google-talkplugin-amd64/DEBIAN/control \
 	&& dpkg -b /tmp/google-talkplugin-amd64 /tmp/google-talkplugin-amd64-fixed.deb \
-	&& dpkg -i /tmp/google-talkplugin-amd64.deb \
-	&& rm -rf /tmp/*.deb \
-	&& apt-get purge -y --auto-remove $buildDeps
+	&& dpkg -i /tmp/google-talkplugin-amd64-fixed.deb \
+	&& rm -rf /tmp/* \
+	&& apt-get purge -y --auto-remove curl \
+	&& rm -rf /var/lib/apt/lists/*
 
 # Add chromium user
 RUN useradd -m -G audio,video chromium
