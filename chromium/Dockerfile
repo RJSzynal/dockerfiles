@@ -54,6 +54,7 @@ RUN apt-get update && apt-get install -y \
 
 # Download the google-talkplugin
 RUN apt-get update && apt-get install -y \
+		ca-certificates \
 		curl \
 		libpango-1.0-0 \
 	--no-install-recommends \
