@@ -53,7 +53,7 @@ RUN apt-get update && apt-get install -y \
 	&& apt-get update && apt-get install -y \
 		google-chrome-beta \
 	--no-install-recommends \
-	&& apt-get purge --auto-remove -y curl \
+	&& apt-get purge -y --auto-remove curl \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Download the google-talkplugin
@@ -67,7 +67,7 @@ RUN apt-get update && apt-get install -y \
 	&& sed -i "s/libpango1.0-0/libpango-1.0-0/" /tmp/google-talkplugin-amd64/DEBIAN/control \
 	&& dpkg -b /tmp/google-talkplugin-amd64 /tmp/google-talkplugin-amd64-fixed.deb \
 	&& dpkg -i /tmp/google-talkplugin-amd64-fixed.deb \
-	&& rm -rf /tmp/*.deb \
+	&& rm -rf /tmp/* \
 	&& apt-get purge -y --auto-remove curl \
 	&& rm -rf /var/lib/apt/lists/*
 
