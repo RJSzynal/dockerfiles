@@ -30,8 +30,8 @@ foldingathome_build = @echo "==Building ${1}==" && \
 	docker push ${docker_repo_prefix}/${1}:latest
 
 version_build = @echo "==Building ${1}==" && \
-	docker build --no-cache -t ${docker_repo_prefix}/${1}:latest ${1}
-	version=$$(docker run --rm ${docker_repo_prefix}/${1}:latest --version | perl -lpe '($_)=/([0-9]+([.][0-9]+)+)/' | cut -d '.' -f 1-4) && \
+	docker build --no-cache -t ${docker_repo_prefix}/${1}:latest ${1} && \
+	version=$$(docker run --rm ${docker_repo_prefix}/${1}:latest --version | perl -lpe '($$_)=/([0-9]+([.][0-9]+)+)/' | cut -d '.' -f 1-4 | head -n1) && \
 	part_version=$${version%.*} && \
 	docker build -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${part_version} -t ${docker_repo_prefix}/${1}:$${part_version%.*} -t ${docker_repo_prefix}/${1}:$${part_version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
 	docker push ${docker_repo_prefix}/${1}:$${version} && \
@@ -76,8 +76,7 @@ firefox:
 	$(call version_build,${@})
 
 flexget:
-	@echo "==Building ${@}=="
-	@echo "This is currently a manual build"
+	$(call version_build,${@})
 
 foldingathome:
 	$(call foldingathome_build,${@})
