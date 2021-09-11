@@ -6,9 +6,12 @@ FROM python:3-slim
 LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
 
 RUN pip install --upgrade pip \
-	&& pip install -I flexget transmissionrpc
+	&& pip install -I flexget transmission-rpc
 
-# Add Spotify user
+# Hack to get around UnknownTimezoneWarning : https://github.com/Flexget/Flexget/discussions/3070
+RUN sed -i 's/(date_string)/(date_string, tzinfos={"CEST": "UTC+2"})/' /usr/local/lib/python3.9/site-packages/flexget/plugins/input/rss.py
+
+# Add Flexget user
 RUN groupadd -g 1000 flexget \
 	&& useradd -mg flexget -u 1000 flexget \
 	&& mkdir -p /home/flexget/.flexget \
