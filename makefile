@@ -5,29 +5,41 @@ projects            := $(project_dockerfiles:%/Dockerfile=%)
 github_build = @echo "==Building ${1}==" && \
 	version=$$(curl -s https://api.github.com/repos/${1}/${1}/releases/latest | grep "tag_name" | cut -d '"' -f 4 | sed 's/^v//') && \
 	part_version=$${version%.*} && \
-	docker build -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${part_version} -t ${docker_repo_prefix}/${1}:$${part_version%.*} -t ${docker_repo_prefix}/${1}:$${part_version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
-	docker push ${docker_repo_prefix}/${1}:$${version} && \
-	docker push ${docker_repo_prefix}/${1}:$${part_version} && \
-	docker push ${docker_repo_prefix}/${1}:$${part_version%.*} && \
-	docker push ${docker_repo_prefix}/${1}:$${part_version%%.*} && \
-	docker push ${docker_repo_prefix}/${1}:latest
+	if [ $$(docker manifest inspect ${docker_repo_prefix}/${1}:$${version} > /dev/null ; echo $$?) -gt 0 ]; then \
+		docker build -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${part_version} -t ${docker_repo_prefix}/${1}:$${part_version%.*} -t ${docker_repo_prefix}/${1}:$${part_version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
+		docker push ${docker_repo_prefix}/${1}:$${version} && \
+		docker push ${docker_repo_prefix}/${1}:$${part_version} && \
+		docker push ${docker_repo_prefix}/${1}:$${part_version%.*} && \
+		docker push ${docker_repo_prefix}/${1}:$${part_version%%.*} && \
+		docker push ${docker_repo_prefix}/${1}:latest; \
+	else \
+		echo "Latest version already built"; \
+	fi
 
 suckless_build = @echo "==Building ${1}==" && \
 	app="${1}" && \
 	version=$$(curl -s https://git.suckless.org/$${app%%-*}/refs.html | sed -n 's/.*<td>\([0-9.]*\)<\/td>.*/\1/p' | sed -n '2p') && \
-	docker build -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${version%.*} -t ${docker_repo_prefix}/${1}:$${version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
-	docker push ${docker_repo_prefix}/${1}:$${version} && \
-	docker push ${docker_repo_prefix}/${1}:$${version%.*} && \
-	docker push ${docker_repo_prefix}/${1}:$${version%%.*} && \
-	docker push ${docker_repo_prefix}/${1}:latest
+	if [ $$(docker manifest inspect ${docker_repo_prefix}/${1}:$${version} > /dev/null ; echo $$?) -gt 0 ]; then \
+		docker build -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${version%.*} -t ${docker_repo_prefix}/${1}:$${version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
+		docker push ${docker_repo_prefix}/${1}:$${version} && \
+		docker push ${docker_repo_prefix}/${1}:$${version%.*} && \
+		docker push ${docker_repo_prefix}/${1}:$${version%%.*} && \
+		docker push ${docker_repo_prefix}/${1}:latest; \
+	else \
+		echo "Latest version already built"; \
+	fi
 
 foldingathome_build = @echo "==Building ${1}==" && \
 	version=$$(curl -s https://download.foldingathome.org/ | grep "fahclient/debian-stable-64bit" | grep -Po '\d+.\d+.\d+') && \
-	docker build --build-arg fah_version=$${version} -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${version%.*} -t ${docker_repo_prefix}/${1}:$${version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
-	docker push ${docker_repo_prefix}/${1}:$${version} && \
-	docker push ${docker_repo_prefix}/${1}:$${version%.*} && \
-	docker push ${docker_repo_prefix}/${1}:$${version%%.*} && \
-	docker push ${docker_repo_prefix}/${1}:latest
+	if [ $$(docker manifest inspect ${docker_repo_prefix}/${1}:$${version} > /dev/null ; echo $$?) -gt 0 ]; then \
+		docker build --build-arg fah_version=$${version} -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${version%.*} -t ${docker_repo_prefix}/${1}:$${version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
+		docker push ${docker_repo_prefix}/${1}:$${version} && \
+		docker push ${docker_repo_prefix}/${1}:$${version%.*} && \
+		docker push ${docker_repo_prefix}/${1}:$${version%%.*} && \
+		docker push ${docker_repo_prefix}/${1}:latest; \
+	else \
+		echo "Latest version already built"; \
+	fi
 
 version_build = @echo "==Building ${1}==" && \
 	docker build --no-cache -t ${docker_repo_prefix}/${1}:latest ${1} && \
