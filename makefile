@@ -14,7 +14,7 @@ github_build = @echo "==Building ${1}==" && \
 
 suckless_build = @echo "==Building ${1}==" && \
 	app="${1}" && \
-	version=$$(curl -s https://git.suckless.org/$${app%%-*}/refs.html | grep '<tr>' | tail -n1 | sed -n 's/.*<td>\([0-9.]*\)<\/td>.*/\1/p') && \
+	version=$$(curl -s https://git.suckless.org/$${app%%-*}/refs.html | sed -n 's/.*<td>\([0-9.]*\)<\/td>.*/\1/p' | head -n2) && \
 	docker build -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${version%.*} -t ${docker_repo_prefix}/${1}:$${version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
 	docker push ${docker_repo_prefix}/${1}:$${version} && \
 	docker push ${docker_repo_prefix}/${1}:$${version%.*} && \
