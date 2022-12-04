@@ -47,7 +47,7 @@ all: ${projects}
 
 alpine: azure-cli gcloud gitsome keepassxc
 
-debian: audacity awscli chrome chrome-beta chromium firefox flexget gimp hollywood htop keepass2 signal-messenger signal-messenger-beta spotifyd spotify-client vivaldi vscode vscodium
+debian: audacity awscli chrome chrome-beta chromium firefox flexget gimp hollywood htop keepass2 signal-messenger signal-messenger-beta spotifyd spotify-client st st-monokai surf vivaldi vscode vscodium
 
 ubuntu: foldingathome
 
