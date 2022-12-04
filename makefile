@@ -22,7 +22,7 @@ suckless_build = @echo "==Building ${1}==" && \
 	docker push ${docker_repo_prefix}/${1}:latest
 
 foldingathome_build = @echo "==Building ${1}==" && \
-	version=$$(curl -s https://download.foldingathome.org/ | grep "fahclient/debian-stable-64bit" | grep -Po '\d.\d.\d') && \
+	version=$$(curl -s https://download.foldingathome.org/ | grep "fahclient/debian-stable-64bit" | grep -Po '\d+.\d+.\d+') && \
 	docker build --build-arg fah_version=$${version} -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${version%.*} -t ${docker_repo_prefix}/${1}:$${version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
 	docker push ${docker_repo_prefix}/${1}:$${version} && \
 	docker push ${docker_repo_prefix}/${1}:$${version%.*} && \
@@ -45,9 +45,9 @@ version_build = @echo "==Building ${1}==" && \
 
 all: ${projects}
 
-alpine: azure-cli flexget gcloud gitsome keepassxc
+alpine: azure-cli gcloud gitsome keepassxc
 
-debian: audacity awscli chrome chrome-beta chromium firefox gimp hollywood htop keepass2 signal-messenger signal-messenger-beta spotifyd spotify-client vivaldi vscode vscodium
+debian: audacity awscli chrome chrome-beta chromium firefox flexget gimp hollywood htop keepass2 signal-messenger signal-messenger-beta spotifyd spotify-client vivaldi vscode vscodium
 
 ubuntu: foldingathome
 
