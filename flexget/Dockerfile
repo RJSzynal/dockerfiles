@@ -2,14 +2,20 @@
 #
 # */30 * * * * docker run --rm -v [LOCAL_CONFIG_LOCATION]:/home/flexget/.flexget --net container:transmission rjszynal/flexget
 
-FROM python:3-slim
+FROM python:3.11-slim
 LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
 
 RUN pip install --upgrade pip \
-	&& pip install -I flexget transmission-rpc
+	&& apt-get update \
+	&& apt-get install -y \
+		build-essential \
+		--no-install-recommends \
+	&& pip install -I flexget transmission-rpc \
+	&& apt-get purge --auto-remove -y build-essential \
+	&& rm -rf /var/lib/apt/lists/*
 
 # Hack to get around UnknownTimezoneWarning : https://github.com/Flexget/Flexget/discussions/3070
-RUN sed -i 's/(date_string)/(date_string, tzinfos={"CEST": "UTC+2"})/' /usr/local/lib/python3.9/site-packages/flexget/plugins/input/rss.py
+RUN sed -i 's/(date_string)/(date_string, tzinfos={"CEST": "UTC+2", "CET": "UTC+1"})/' /usr/local/lib/python3.11/site-packages/flexget/plugins/input/rss.py
 
 # Add Flexget user
 RUN groupadd -g 1000 flexget \
