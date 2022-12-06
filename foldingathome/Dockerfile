@@ -1,14 +1,14 @@
 # Folding@Home
 #
 # docker run --rm -d \
-# 	--gpus=all \
-#	-v /root/.fah:/fah \
-# 	--name folding \
-# 	rjszynal/foldingathome \
-#		--user=<YOUR_USERNAME> \
-#		--team=<YOUR_TEAM> \
-#		--priority=idle \
-#		--power=full
+#     --gpus=all \
+#     -v /root/.fah:/fah \
+#     --name folding \
+#      rjszynal/foldingathome \
+#        --user=<YOUR_USERNAME> \
+#        --team=<YOUR_TEAM> \
+#        --priority=idle \
+#        --power=full
 
 FROM debian:sid-slim as build
 
@@ -16,11 +16,11 @@ WORKDIR "/"
 
 RUN apt-get update 
 RUN apt-get install -y --no-install-recommends \
-		bzip2 \
-		ca-certificates \
-		ocl-icd-opencl-dev \
-		tar \
-		wget
+        bzip2 \
+        ca-certificates \
+        ocl-icd-opencl-dev \
+        tar \
+        wget
 # point at lib mapped in by container runtime
 RUN echo "libnvidia-opencl.so.1" > /nvidia.icd
 #Get the application binaries

@@ -1,28 +1,28 @@
 # Simple Terminal (st)
 #
 # docker run -d \
-#		-v /tmp/.X11-unix:/tmp/.X11-unix \
-#		-v $HOME/.st/config:/home/st/.config/st \
-#		-e DISPLAY \
-#		--name st \
-#		rjszynal/st
+#     -v /tmp/.X11-unix:/tmp/.X11-unix \
+#     -v $HOME/.st/config:/home/st/.config/st \
+#     -e DISPLAY \
+#     --name st \
+#     rjszynal/st
 
 FROM debian:sid-slim as build
 
 RUN apt-get update && apt-get install -y \
         --no-install-recommends \
-		ca-certificates \
-		libfontconfig1-dev \
-		libfreetype6-dev \
-		gcc \
-		git \
-		make \
-		libx11-dev \
-		libxft-dev
+        ca-certificates \
+        libfontconfig1-dev \
+        libfreetype6-dev \
+        gcc \
+        git \
+        make \
+        libx11-dev \
+        libxft-dev
 
 RUN git clone https://git.suckless.org/st /usr/src/st \
-	&& cd /usr/src/st \
-	&& make clean install
+    && cd /usr/src/st \
+    && make clean install
 
 
 FROM debian:sid-slim
@@ -31,10 +31,10 @@ LABEL maintainer.name="Robert Szynal" \
 
 RUN apt-get update && apt-get install -y \
         --no-install-recommends \
-		# libfontconfig1 \
-		# libfreetype6 \
-		libx11-6 \
-		libxft2 \
+        # libfontconfig1 \
+        # libfreetype6 \
+        libx11-6 \
+        libxft2 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /usr/local/bin/st /usr/bin/st
