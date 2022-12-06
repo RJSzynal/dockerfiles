@@ -1,8 +1,8 @@
 diff --git a/config.def.h b/config.def.h
-index 82b1b09..6065bb6 100644
+index 91ab8ca..35e0c9a 100644
 --- a/config.def.h
 +++ b/config.def.h
-@@ -84,31 +84,23 @@ unsigned int tabspaces = 8;
+@@ -95,33 +95,23 @@ unsigned int tabspaces = 8;
  
  /* Terminal colors (16 first used in escape sequence) */
  static const char *colorname[] = {
@@ -31,7 +31,9 @@ index 82b1b09..6065bb6 100644
 -	/* more colors can be added after 255 to use with DefaultXX */
 -	"#cccccc",
 -	"#555555",
-+	/* monokai */
+-	"gray90", /* default foreground colour */
+-	"black", /* default background colour */
++       /* monokai */
 +   "#272822",  /* base00 */
 +   "#f92672",  /* base08 */
 +   "#a6e22e",  /* base0B */
@@ -51,13 +53,17 @@ index 82b1b09..6065bb6 100644
  };
  
  
-@@ -118,8 +110,8 @@ static const char *colorname[] = {
+@@ -129,10 +119,10 @@ static const char *colorname[] = {
+  * Default colors (colorname index)
+  * foreground, background, cursor, reverse cursor
   */
- unsigned int defaultfg = 7;
- unsigned int defaultbg = 0;
--static unsigned int defaultcs = 256;
+-unsigned int defaultfg = 258;
+-unsigned int defaultbg = 259;
+-unsigned int defaultcs = 256;
 -static unsigned int defaultrcs = 257;
-+static unsigned int defaultcs = 13;
++unsigned int defaultfg = 7;
++unsigned int defaultbg = 20;
++unsigned int defaultcs = 13;
 +static unsigned int defaultrcs = 0;
  
  /*
