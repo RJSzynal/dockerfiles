@@ -21,19 +21,22 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Install VSCodium dependencies
 RUN apt-get update && apt-get -y install \
-        git \
-        gnupg \
-        libnotify4 \
-        libnss3 \
-        libsecret-1-0 \
-        libx11-xcb1 \
-        libxkbfile1 \
-        libxss1 \
-        libxtst6 \
-        libcanberra-gtk3-module \
-        openssh-client \
-        --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
+		git \
+		gnupg \
+		libdrm2 \
+		libgbm1 \
+		libnotify4 \
+		libnss3 \
+		libsecret-1-0 \
+		libx11-xcb1 \
+		libxkbfile1 \
+		libxss1 \
+		libxtst6 \
+		libcanberra-gtk3-module \
+		openssh-client \
+		xdg-utils \
+		--no-install-recommends \
+	&& rm -rf /var/lib/apt/lists/*
 
 # Install VSCodium
 RUN buildDeps=' \
