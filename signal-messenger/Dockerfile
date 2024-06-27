@@ -1,4 +1,4 @@
-FROM debian:sid-slim
+FROM debian:stable-slim
 LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
 
 ARG version=1.21.1

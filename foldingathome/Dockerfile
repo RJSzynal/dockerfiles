@@ -10,45 +10,43 @@
 #        --priority=idle \
 #        --power=full
 
-FROM debian:sid-slim as build
+FROM debian:stable-slim as build
 
 WORKDIR "/"
 
 RUN apt-get update 
 RUN apt-get install -y --no-install-recommends \
-        bzip2 \
-        ca-certificates \
-        ocl-icd-opencl-dev \
-        tar \
-        wget
+        ocl-icd-opencl-dev
 # point at lib mapped in by container runtime
 RUN echo "libnvidia-opencl.so.1" > /nvidia.icd
-#Get the application binaries
-ARG fah_version
-RUN wget https://download.foldingathome.org/releases/public/release/fahclient/debian-stable-64bit/v${fah_version%.*}/fahclient_${fah_version}-64bit-release.tar.bz2
-RUN tar -jxvf /fahclient_${fah_version}-64bit-release.tar.bz2
-RUN mv fahclient_${fah_version}-64bit-release/FAHC* /
 
 
 # CUDA 9.2 is chosen to be compatable with all drivers v396+
 FROM nvidia/cuda:9.2-base-ubuntu18.04
 LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
 
-# RUN apt-get update && apt-get install -y \
-# 		clinfo \
-# 		ocl-icd-opencl-dev \
-# 	--no-install-recommends \
-# 	&& rm -rf /var/lib/apt/lists/*
+# Add Folding user
+RUN useradd -m fah-client
 
-COPY --from=build /FAHC* /usr/bin/
+# Install Folding at Home Client
+RUN buildDeps=' \
+        ca-certificates \
+        curl \
+        jq \
+    ' \
+    && set -x \
+    && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
+    && fah_url=$(curl -s https://download.foldingathome.org/ | jq -r '.[] | select(.platform=="lin") | .groups[] | select(.oses[]=="Debian") | .files[] | select(.filename | contains("amd64")) | .url') \
+    && curl -L -o /tmp/${fah_url##*/} ${fah_url} \
+    && dpkg -i /tmp/${fah_url##*/} \
+    && rm -f /tmp/${fah_url##*/} \
+    && apt-get purge -y --auto-remove ${buildDeps} \
+    && rm -rf /var/lib/apt/lists/*
 COPY --from=build /nvidia.icd /etc/OpenCL/vendors/
 COPY --from=build /usr/lib/x86_64-linux-gnu/libOpenCL.so /usr/lib/x86_64-linux-gnu/
 
-# Add Folding user
-RUN useradd -m folding
-
 # Run as non privileged user
-USER folding
+USER fah-client
 
 ENV NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility

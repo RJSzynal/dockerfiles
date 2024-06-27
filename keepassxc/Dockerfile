@@ -30,7 +30,7 @@ RUN buildDeps=' \
     ' \
     set -x \
     && apk --no-cache add \
-        $buildDeps \
+        ${buildDeps} \
     && git clone --depth 1 --branch ${version} https://github.com/keepassxreboot/keepassxc.git /usr/src/keepassxc \
     && cd /usr/src/keepassxc \
     && mkdir build \
@@ -38,7 +38,7 @@ RUN buildDeps=' \
     && cmake -DWITH_TESTS=ON -DWITH_XC_AUTOTYPE=ON -DWITH_XC_HTTP=ON .. \
     && make \
     && make install \
-    && apk del $buildDeps \
+    && apk del ${buildDeps} \
     && rm -rf /usr/src/keepassxc \
     && echo "Build complete."
 

@@ -7,7 +7,7 @@
 #     --name st \
 #     rjszynal/st-monokai
 
-FROM debian:sid-slim as build
+FROM debian:stable-slim as build
 
 RUN apt-get update && apt-get install -y \
         --no-install-recommends \
@@ -28,7 +28,7 @@ RUN git clone https://git.suckless.org/st /usr/src/st \
     && make clean install
 
 
-FROM debian:sid-slim
+FROM debian:stable-slim
 LABEL maintainer.name="Robert Szynal" \
     maintainer.email="rjszynal@gmail.com"
 

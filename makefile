@@ -30,7 +30,7 @@ suckless_build = @echo "==Building ${1}==" && \
 	fi
 
 foldingathome_build = @echo "==Building ${1}==" && \
-	version=$$(curl -s https://download.foldingathome.org/ | grep "fahclient/debian-stable-64bit" | grep -Po '\d+.\d+.\d+') && \
+	version=$$(curl -s https://download.foldingathome.org/ | jq -r '.[] | select(.platform=="lin") | .groups[] | select(.oses[]=="Debian") | .files[] | select(.filename | contains("amd64")) | .version | join(".")') && \
 	if [ $$(docker manifest inspect ${docker_repo_prefix}/${1}:$${version} > /dev/null ; echo $$?) -gt 0 ]; then \
 		docker build --build-arg fah_version=$${version} -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${version%.*} -t ${docker_repo_prefix}/${1}:$${version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
 		docker push ${docker_repo_prefix}/${1}:$${version} && \

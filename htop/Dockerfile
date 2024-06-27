@@ -4,7 +4,7 @@
 #     --pid host \
 #     rjszynal/htop
 
-FROM debian:sid-slim
+FROM debian:stable-slim
 LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
 
 # Install htop

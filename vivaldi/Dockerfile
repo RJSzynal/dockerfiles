@@ -14,7 +14,7 @@
 #     rjszynal/vivaldi
 
 
-FROM debian:sid-slim as build
+FROM debian:stable-slim as build
 
 RUN apt-get update && apt-get install -y \
         binutils \
@@ -31,7 +31,7 @@ RUN cd /tmp/codecs \
     && rm -f data.tar.xz codecs.deb \
     && mv usr/lib/chromium-browser/libffmpeg.so /tmp/
 
-FROM debian:sid-slim
+FROM debian:stable-slim
 LABEL maintainer.name="Robert Szynal" \
       maintainer.email="rjszynal@gmail.com"
 

@@ -13,7 +13,7 @@
 #     rjszynal/vscodium
 
 # Base docker image
-FROM debian:sid-slim
+FROM debian:stable-slim
 LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
 
 # Tell debconf to run in non-interactive mode
@@ -44,7 +44,7 @@ RUN buildDeps=' \
         curl \
     ' \
     && set -x \
-    && apt-get update && apt-get install -y $buildDeps --no-install-recommends \
+    && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && curl -s https://api.github.com/repos/VSCodium/vscodium/releases/latest \
         | grep browser_download_url \
@@ -53,7 +53,7 @@ RUN buildDeps=' \
         | xargs -n 1 curl -L -o /tmp/vscodium-amd64.deb \
     && dpkg -i /tmp/vscodium-amd64.deb \
     && rm -rf /tmp/*.deb \
-    && apt-get purge -y --auto-remove $buildDeps
+    && apt-get purge -y --auto-remove ${buildDeps}
 
 # Add VSCodium user
 RUN useradd -m -G audio,video vscodium

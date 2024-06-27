@@ -3,7 +3,7 @@
 # Usage:
 # docker run --rm -it rjszynal/hollywood
 
-FROM debian:sid-slim
+FROM debian:stable-slim
 LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
 
 # Install hollywood

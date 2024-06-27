@@ -7,7 +7,7 @@
 #     --name surf \
 #     rjszynal/surf
 
-FROM debian:sid-slim
+FROM debian:stable-slim
 LABEL maintainer.name="Robert Szynal" \
       maintainer.email="rjszynal@gmail.com"
 

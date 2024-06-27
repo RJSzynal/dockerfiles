@@ -13,7 +13,7 @@
 #     rjszynal/vscode
 
 # Base docker image
-FROM debian:sid-slim
+FROM debian:stable-slim
 LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
 
 # Tell debconf to run in non-interactive mode
@@ -41,12 +41,12 @@ RUN buildDeps=' \
         curl \
     ' \
     && set -x \
-    && apt-get update && apt-get install -y $buildDeps --no-install-recommends \
+    && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && curl -L -o /tmp/vscode-amd64.deb https://go.microsoft.com/fwlink/\?LinkID\=760868 \
     && dpkg -i /tmp/vscode-amd64.deb \
     && rm -rf /tmp/*.deb \
-    && apt-get purge -y --auto-remove $buildDeps
+    && apt-get purge -y --auto-remove ${buildDeps}
 
 # Add VSCode user
 RUN useradd -m -G audio,video vscode

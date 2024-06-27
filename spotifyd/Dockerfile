@@ -1,28 +1,7 @@
-FROM rust:slim as build
-
-WORKDIR /usr/src/
-
-RUN apt-get update && apt-get install -y \
-        ca-certificates \
-        curl \
-        libasound2-dev \
-        libssl-dev \
-        libpulse-dev \
-        libdbus-1-dev \
-        unzip \
-    --no-install-recommends
-
-RUN export version=$(curl -s https://api.github.com/repos/Spotifyd/spotifyd/releases/latest | grep "tag_name" | cut -d '"' -f 4 | sed 's/^v//') \
-    && curl -Lo /tmp/source.zip \
-        https://github.com/Spotifyd/spotifyd/archive/v${version}.zip \
-    && unzip /tmp/source.zip \
-    && cd spotifyd-${version} \
-    && cargo build --release --features pulseaudio_backend \
-    && mv target/release/spotifyd /usr/bin/
-
-
-FROM debian:sid-slim
+FROM debian:stable-slim
 LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
+
+ENV DEBIAN_FRONTEND="noninteractive"
 
 # Install Spotifyd dependencies
 RUN apt-get update && apt-get -y install \
@@ -31,7 +10,22 @@ RUN apt-get update && apt-get -y install \
         --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /usr/bin/spotifyd /usr/bin/
+# Install Spotifyd
+RUN buildDeps=' \
+        ca-certificates \
+        curl \
+    ' \
+    && set -x \
+    && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
+    && curl -s https://api.github.com/repos/Spotifyd/spotifyd/releases/latest \
+        | grep browser_download_url \
+        | grep 'linux-slim.tar.gz"' \
+        | cut -d '"' -f 4 \
+        | xargs -n 1 curl -L -o /tmp/spotifyd-linux-slim.tar.gz \
+    && tar -xvf /tmp/spotifyd-linux-slim.tar.gz -C /usr/bin --strip-components 1 \
+    && rm -rf /tmp/*.tar.gz \
+    && apt-get purge -y --auto-remove ${buildDeps} \
+    && rm -rf /var/lib/apt/lists/*
 
 # Add Spotify user
 RUN useradd -mG audio spotify
