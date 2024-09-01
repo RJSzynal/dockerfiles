@@ -8,7 +8,8 @@
 #     rjszynal/gitsome
 
 FROM python:3.7-alpine3.9
-LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
+LABEL maintainer.name="Robert Szynal" \
+      maintainer.email="rjszynal@gmail.com"
 
 RUN pip3 install gitsome
 

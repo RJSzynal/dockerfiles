@@ -20,7 +20,8 @@
 #     rjszynal/firefox
 
 FROM debian:stable-slim
-LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
+LABEL maintainer.name="Robert Szynal" \
+      maintainer.email="rjszynal@gmail.com"
 
 ENV DEBIAN_FRONTEND="noninteractive"
 

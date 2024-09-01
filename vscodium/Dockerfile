@@ -14,7 +14,8 @@
 
 # Base docker image
 FROM debian:stable-slim
-LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
+LABEL maintainer.name="Robert Szynal" \
+      maintainer.email="rjszynal@gmail.com"
 
 # Tell debconf to run in non-interactive mode
 ENV DEBIAN_FRONTEND noninteractive

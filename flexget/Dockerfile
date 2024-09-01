@@ -3,7 +3,8 @@
 # */30 * * * * docker run --rm -v [LOCAL_CONFIG_LOCATION]:/home/flexget/.flexget --net container:transmission rjszynal/flexget
 
 FROM python:3.11-slim
-LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
+LABEL maintainer.name="Robert Szynal" \
+      maintainer.email="rjszynal@gmail.com"
 
 RUN pip install --upgrade pip \
     && apt-get update \

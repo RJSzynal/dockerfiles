@@ -23,7 +23,8 @@ RUN echo "libnvidia-opencl.so.1" > /nvidia.icd
 
 # CUDA 9.2 is chosen to be compatable with all drivers v396+
 FROM nvidia/cuda:9.2-base-ubuntu18.04
-LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
+LABEL maintainer.name="Robert Szynal" \
+      maintainer.email="rjszynal@gmail.com"
 
 # Add Folding user
 RUN useradd -m fah-client

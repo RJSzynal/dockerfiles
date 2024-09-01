@@ -4,7 +4,8 @@
 # docker run --rm -it rjszynal/hollywood
 
 FROM debian:stable-slim
-LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
+LABEL maintainer.name="Robert Szynal" \
+      maintainer.email="rjszynal@gmail.com"
 
 # Install hollywood
 RUN apt-get update && apt-get install -y \

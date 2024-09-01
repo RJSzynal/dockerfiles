@@ -9,7 +9,8 @@
 #     rjszynal/gimp
 #
 FROM debian:stable-slim
-LABEL maintainer "Robert Szynal <rjszynal@gmail.com>"
+LABEL maintainer.name="Robert Szynal" \
+      maintainer.email="rjszynal@gmail.com"
 
 RUN apt-get update && apt-get install -y \
         gimp \
