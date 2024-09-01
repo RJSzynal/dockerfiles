@@ -34,8 +34,9 @@ RUN buildDeps=' \
         gnupg2\
     ' \
     && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
-        && curl -sSL https://packages.mozilla.org/apt/repo-signing-key.gpg | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/mozilla.gpg \
-    && echo "deb [signed-by=/etc/apt/trusted.gpg.d/mozilla.gpg] https://packages.mozilla.org/apt mozilla main" > /etc/apt/sources.list.d/mozilla.list \
+    && curl -sSL https://packages.mozilla.org/apt/repo-signing-key.gpg | gpg --dearmor --yes -o /usr/share/keyrings/mozilla.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/mozilla.gpg] https://packages.mozilla.org/apt mozilla main" \
+        > /etc/apt/sources.list.d/mozilla.list \
     && apt-get update && apt-get install -y \
         firefox \
     --no-install-recommends \

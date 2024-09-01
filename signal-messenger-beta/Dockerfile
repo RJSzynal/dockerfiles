@@ -6,8 +6,9 @@ RUN apt-get update && apt-get install -y \
         ca-certificates \
         gnupg2 \
         --no-install-recommends \
-    && curl -s https://updates.signal.org/desktop/apt/keys.asc | apt-key add - \
-    && echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" >> /etc/apt/sources.list.d/signal-xenial.list \
+    && curl -s https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor --yes -o /usr/share/keyrings/signal.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/signal.gpg arch=amd64] https://updates.signal.org/desktop/apt xenial main" \
+        > /etc/apt/sources.list.d/signal.list \
     && apt-get update && apt-get install -y \
         libgtk-3-0 \
         libx11-xcb1 \

@@ -9,8 +9,8 @@ RUN buildDeps=' \
         gnupg2\
     ' \
     && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
-        && curl -sSL https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg \
-    && echo "deb [signed-by=/etc/apt/trusted.gpg.d/spotify.gpg] http://repository.spotify.com stable non-free" > /etc/apt/sources.list.d/spotify.list \
+        && curl -sSL https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | gpg --dearmor --yes -o /usr/share/keyrings/spotify.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/spotify.gpg] http://repository.spotify.com stable non-free" > /etc/apt/sources.list.d/spotify.list \
     && apt-get update && apt-get install -y \
         libgl1-mesa-glx \
         libpulse0 \
