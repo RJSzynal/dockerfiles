@@ -145,8 +145,7 @@ surf:
 	$(call suckless_build,${@})
 
 vivaldi:
-	@echo "==Building ${@}=="
-	@echo "This is currently a manual build"
+	$(call version_build,${@})
 
 vscode:
 	@echo "==Building ${@}=="
