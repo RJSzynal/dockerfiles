@@ -2,16 +2,16 @@ docker_repo_prefix  := rjszynal
 project_dockerfiles := $(wildcard */Dockerfile)
 projects            := $(project_dockerfiles:%/Dockerfile=%)
 
-github_build = @echo "==Building ${1}==" && \
-	version=$$(curl -s https://api.github.com/repos/${1}/${1}/releases/latest | grep "tag_name" | cut -d '"' -f 4 | sed 's/^v//') && \
+github_build = @echo "==Building ${2}==" && \
+	version=$$(curl -s https://api.github.com/repos/${1}/${2}/releases/latest | grep "tag_name" | cut -d '"' -f 4 | sed 's/^v//') && \
 	part_version=$${version%.*} && \
-	if [ $$(docker manifest inspect ${docker_repo_prefix}/${1}:$${version} > /dev/null ; echo $$?) -gt 0 ]; then \
-		docker build -t ${docker_repo_prefix}/${1}:$${version} -t ${docker_repo_prefix}/${1}:$${part_version} -t ${docker_repo_prefix}/${1}:$${part_version%.*} -t ${docker_repo_prefix}/${1}:$${part_version%%.*} -t ${docker_repo_prefix}/${1}:latest ${1} && \
-		docker push ${docker_repo_prefix}/${1}:$${version} && \
-		docker push ${docker_repo_prefix}/${1}:$${part_version} && \
-		docker push ${docker_repo_prefix}/${1}:$${part_version%.*} && \
-		docker push ${docker_repo_prefix}/${1}:$${part_version%%.*} && \
-		docker push ${docker_repo_prefix}/${1}:latest; \
+	if [ $$(docker manifest inspect ${docker_repo_prefix}/${2}:$${version} > /dev/null ; echo $$?) -gt 0 ]; then \
+		docker build --build-arg version=$${version} -t ${docker_repo_prefix}/${2}:$${version} -t ${docker_repo_prefix}/${2}:$${part_version} -t ${docker_repo_prefix}/${2}:$${part_version%.*} -t ${docker_repo_prefix}/${2}:$${part_version%%.*} -t ${docker_repo_prefix}/${2}:latest ${2} && \
+		docker push ${docker_repo_prefix}/${2}:$${version} && \
+		docker push ${docker_repo_prefix}/${2}:$${part_version} && \
+		docker push ${docker_repo_prefix}/${2}:$${part_version%.*} && \
+		docker push ${docker_repo_prefix}/${2}:$${part_version%%.*} && \
+		docker push ${docker_repo_prefix}/${2}:latest; \
 	else \
 		echo "Latest version already built"; \
 	fi
@@ -53,13 +53,13 @@ version_build = @echo "==Building ${1}==" && \
 	docker push ${docker_repo_prefix}/${1}:latest
 
 
-.PHONY: all alpine debian audacity awscli azure-cli chrome chrome-beta chromium firefox flexget foldingathome gcloud gimp gitsome hollywood htop keepass2 keepassxc signal-messenger signal-messenger-beta spotify-client spotifyd st st-monokai surf vivaldi vscode vscodium
+.PHONY: all alpine debian audacity awscli azure-cli chrome chrome-beta chromium firefox flexget foldingathome gcloud gimp gitsome hollywood htop hostess keepass2 keepassxc signal-messenger signal-messenger-beta spotify-client spotifyd st st-monokai surf vivaldi vscode vscodium
 
 all: ${projects}
 
 alpine: azure-cli gcloud gitsome keepassxc
 
-debian: audacity awscli chrome chrome-beta chromium firefox flexget gimp hollywood htop keepass2 signal-messenger signal-messenger-beta spotifyd spotify-client st st-monokai surf vivaldi vscode vscodium
+debian: audacity awscli chrome chrome-beta chromium firefox flexget gimp hollywood htop hostess keepass2 signal-messenger signal-messenger-beta spotifyd spotify-client st st-monokai surf vivaldi vscode vscodium
 
 ubuntu: foldingathome
 
@@ -113,6 +113,9 @@ htop:
 	@echo "==Building ${@}=="
 	@echo "This is currently a manual build"
 
+hostess:
+	$(call github_build,cbednarski,${@})
+
 keepass2:
 	@echo "==Building ${@}=="
 	@echo "This is currently a manual build"
@@ -133,7 +136,7 @@ spotify-client:
 	$(call version_build,${@})
 
 spotifyd:
-	$(call github_build,${@})
+	$(call github_build,${@},${@})
 
 st:
 	$(call suckless_build,${@})
@@ -152,4 +155,4 @@ vscode:
 	@echo "This is currently a manual build"
 
 vscodium:
-	$(call github_build,${@})
+	$(call github_build,${@},${@})
