@@ -23,7 +23,7 @@ RUN buildDeps=' \
         | grep 'linux-slim.tar.gz"' \
         | cut -d '"' -f 4 \
         | xargs -n 1 curl -L -o /tmp/spotifyd-linux-slim.tar.gz \
-    && tar -xvf /tmp/spotifyd-linux-slim.tar.gz -C /usr/bin --strip-components 1 \
+    && tar -xvf /tmp/spotifyd-linux-slim.tar.gz -C /usr/bin \
     && rm -rf /tmp/*.tar.gz \
     && apt-get purge -y --auto-remove ${buildDeps} \
     && rm -rf /var/lib/apt/lists/*
