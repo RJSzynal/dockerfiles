@@ -53,13 +53,13 @@ version_build = @echo "==Building ${1}==" && \
 	docker push ${docker_repo_prefix}/${1}:latest
 
 
-.PHONY: all alpine debian audacity awscli azure-cli chrome chrome-beta chromium firefox flexget foldingathome gcloud gimp gitsome hollywood htop hostess keepass2 keepassxc signal-messenger signal-messenger-beta spotify-client spotifyd st st-monokai surf vivaldi vscode vscodium
+.PHONY: all alpine debian audacity awscli azure-cli chrome chrome-beta chromium firefox flexget foldingathome gcloud gimp gitsome google-drive-ocamlfuse hollywood htop hostess keepass2 keepassxc shellcheck signal-messenger signal-messenger-beta spotify-client spotifyd st st-monokai surf vivaldi vscode vscodium
 
 all: ${projects}
 
 alpine: azure-cli gcloud gitsome keepassxc
 
-debian: audacity awscli chrome chrome-beta chromium firefox flexget gimp hollywood htop hostess keepass2 signal-messenger signal-messenger-beta spotifyd spotify-client st st-monokai surf vivaldi vscode vscodium
+debian: audacity awscli chrome chrome-beta chromium firefox flexget gimp google-drive-ocamlfuse hollywood htop hostess keepass2 shellcheck signal-messenger signal-messenger-beta spotifyd spotify-client st st-monokai surf vivaldi vscode vscodium
 
 ubuntu: foldingathome
 
@@ -105,6 +105,9 @@ gitsome:
 	@echo "==Building ${@}=="
 	@echo "This is currently a manual build"
 
+google-drive-ocamlfuse:
+	$(call github_build,astrada,${@})
+
 hollywood:
 	@echo "==Building ${@}=="
 	@echo "This is currently a manual build"
@@ -123,6 +126,9 @@ keepass2:
 keepassxc:
 	@echo "==Building ${@}=="
 	@echo "This is currently a manual build"
+
+shellcheck:
+	$(call version_build,${@})
 
 signal-messenger:
 	@echo "==Building ${@}=="
